@@ -18,16 +18,16 @@ public class DraweeConfig {
         return placeholderDrawable;
     }
 
-    public static void setPlaceholderId(Drawable placeholderDrawable) {
-        placeholderDrawable = placeholderDrawable;
+    public static void setPlaceholderDrawable(Drawable placeDrawable) {
+        placeholderDrawable = placeDrawable;
     }
 
     public static Drawable getFailDrawable() {
         return failDrawable;
     }
 
-    public static void setFailDrawable(Drawable failDrawable) {
-        failDrawable = failDrawable;
+    public static void setFailDrawable(Drawable failedDrawable) {
+        failDrawable = failedDrawable;
     }
 
 }

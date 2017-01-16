@@ -26,6 +26,9 @@ import com.facebook.common.util.ByteConstants;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.controller.ControllerListener;
+import com.facebook.drawee.drawable.DrawableParent;
+import com.facebook.drawee.drawable.ScalingUtils;
+import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.cache.DefaultCacheKeyFactory;
@@ -38,8 +41,15 @@ import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.facebook.webpsupport.WebpBitmapFactoryImpl;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 
 public class FrescoLoader {
+
+
+    private static final int PLACEHOLDER_IMAGE_INDEX = 1;
+    private static final int FAILURE_IMAGE_INDEX = 5;
 
     private ActivityManager mActivityManager;
 
@@ -65,7 +75,7 @@ public class FrescoLoader {
         if (frescoConfig == null) {
             throw new NullPointerException("config can not be null");
         }
-        DraweeConfig.setPlaceholderId(frescoConfig.getPlaceholderDrawable());
+        DraweeConfig.setPlaceholderDrawable(frescoConfig.getPlaceholderDrawable());
         DraweeConfig.setFailDrawable(frescoConfig.getFailureDrawable());
         mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         this.context = context;
@@ -215,6 +225,7 @@ public class FrescoLoader {
         if (null == simpleDraweeView) {
             return;
         }
+        initImage(simpleDraweeView);
         simpleDraweeView.post(new Runnable() {
             @Override
             public void run() {
@@ -248,6 +259,7 @@ public class FrescoLoader {
         if (null == simpleDraweeView) {
             return;
         }
+        initImage(simpleDraweeView);
         simpleDraweeView.post(new Runnable() {
             @Override
             public void run() {
@@ -281,6 +293,7 @@ public class FrescoLoader {
         if (null == simpleDraweeView) {
             return;
         }
+        initImage(simpleDraweeView);
         simpleDraweeView.post(new Runnable() {
             @Override
             public void run() {
@@ -330,6 +343,7 @@ public class FrescoLoader {
         if (null == simpleDraweeView || null == filePath) {
             return;
         }
+        initImage(simpleDraweeView);
         simpleDraweeView.post(new Runnable() {
             @Override
             public void run() {
@@ -362,6 +376,7 @@ public class FrescoLoader {
         if (null == simpleDraweeView || null == asset) {
             return;
         }
+        initImage(simpleDraweeView);
         simpleDraweeView.post(new Runnable() {
             @Override
             public void run() {
@@ -394,6 +409,7 @@ public class FrescoLoader {
         if (null == simpleDraweeView || null == contentUrl) {
             return;
         }
+        initImage(simpleDraweeView);
         simpleDraweeView.post(new Runnable() {
             @Override
             public void run() {
@@ -428,6 +444,7 @@ public class FrescoLoader {
         if (null == simpleDraweeView) {
             return;
         }
+        initImage(simpleDraweeView);
         simpleDraweeView.post(new Runnable() {
             @Override
             public void run() {
@@ -462,6 +479,7 @@ public class FrescoLoader {
         if (null == simpleDraweeView) {
             return;
         }
+        initImage(simpleDraweeView);
         simpleDraweeView.post(new Runnable() {
             @Override
             public void run() {
@@ -501,6 +519,7 @@ public class FrescoLoader {
         if (null == simpleDraweeView) {
             return;
         }
+        initImage(simpleDraweeView);
         simpleDraweeView.post(new Runnable() {
             @Override
             public void run() {
@@ -537,6 +556,7 @@ public class FrescoLoader {
         if (null == simpleDraweeView) {
             return;
         }
+        initImage(simpleDraweeView);
         simpleDraweeView.post(new Runnable() {
             @Override
             public void run() {
@@ -713,5 +733,33 @@ public class FrescoLoader {
     public Drawable getDrawable(int resId) {
         return new BitmapDrawable(context.getResources(), WebpBitmapFactoryImpl.hookDecodeResource(context.getResources(),
                 resId));
+    }
+
+    private void initImage(SimpleDraweeView simpleDraweeView) {
+        if (simpleDraweeView == null) {
+            return;
+        }
+        GenericDraweeHierarchy hierarchy = simpleDraweeView.getHierarchy();
+        Class<?> class1 = hierarchy.getClass();
+        try {
+            Method method = class1.getDeclaredMethod("getParentDrawableAtIndex", int.class);
+            method.setAccessible(true);
+            Drawable placeDrawable = ((DrawableParent) method.invoke(hierarchy, PLACEHOLDER_IMAGE_INDEX)).getDrawable();
+            Drawable failureDrawable = ((DrawableParent) method.invoke(hierarchy, FAILURE_IMAGE_INDEX)).getDrawable();
+            if(placeDrawable == null){
+                hierarchy.setPlaceholderImage(DraweeConfig.getPlaceholderDrawable(), ScalingUtils.ScaleType.CENTER_CROP);
+            }
+            if(failureDrawable == null){
+                hierarchy.setFailureImage(DraweeConfig.getFailDrawable(), ScalingUtils.ScaleType.CENTER_CROP);
+            }
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+
     }
 }
