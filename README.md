@@ -1,8 +1,8 @@
 # FrescoWrapper
 Fresco的封装 方便使用
 #作用
-（1）提供全局配置占位图和失败占位图的功能。通过application中配置FrescoConfig。
-（2）对图片加载进行封装，使得加载本地、url、content图片……更加方便，同时提供加载图片监听。
+（1）提供全局配置占位图和失败占位图的功能。通过application中配置FrescoConfig。<br>
+（2）对图片加载进行封装，使得加载本地、url、content图片……更加方便，同时提供加载图片监听。<br>
 （3）支持 xml中对SimpleDraweeView的宽高wrap_content进行兼容。
 #How to use
 (1) in application<br>
