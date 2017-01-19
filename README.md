@@ -13,7 +13,7 @@ Fresco的封装 方便使用
     // 支持 WebP （静态图+动图），需要添加
     compile 'com.facebook.fresco:animated-webp:0.12.0'
     compile 'com.facebook.fresco:webpsupport:0.12.0'
-    ```
+```
 (2) in application<br>
   application中进行初始化
 ```java
