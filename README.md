@@ -5,7 +5,16 @@ Fresco的封装 方便使用
 （2）对图片加载进行封装，使得加载本地、url、content图片……更加方便，同时提供加载图片监听。<br>
 （3）支持 xml中对SimpleDraweeView的宽高wrap_content进行兼容。
 #How to use
-(1) in application<br>
+(1) in gradle<br>
+```java
+    compile 'com.facebook.fresco:fresco:0.12.0'
+    // 支持 GIF 动图，需要添加
+    compile 'com.facebook.fresco:animated-gif:0.12.0'
+    // 支持 WebP （静态图+动图），需要添加
+    compile 'com.facebook.fresco:animated-webp:0.12.0'
+    compile 'com.facebook.fresco:webpsupport:0.12.0'
+    ```
+(2) in application<br>
   application中进行初始化
 ```java
  FrescoConfig frescoConfig = FrescoConfigBuilder.newInstance().setDiskDirName("FrescoDefault").setSmallDiskDirName
@@ -14,7 +23,7 @@ Fresco的封装 方便使用
                 .icon_default)).build();
         FrescoLoader.getInstance().init(this, frescoConfig);
 ```
-（2）加载图片
+（3）加载图片
 ```java
     //按照xml里simpleDraweeView的配置方式从网络加载图片,图片不可信赖，会按照View的宽高进行resize，异步加载
     FrescoLoader.getInstance().loadImageFromWeb(simpleDraweeView,url,listener);
