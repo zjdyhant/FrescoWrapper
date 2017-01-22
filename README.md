@@ -8,6 +8,7 @@ Fresco的封装 方便使用
 (1) in gradle<br>
 ```java
     compile 'com.facebook.fresco:fresco:0.12.0'
+    
     // 支持 GIF 动图，需要添加
     compile 'com.facebook.fresco:animated-gif:0.12.0'
     // 支持 WebP （静态图+动图），需要添加
